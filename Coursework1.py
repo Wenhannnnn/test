@@ -1,4 +1,7 @@
 #Start of skeleton code
+# Q1 Answer: 264
+# Q2 Answer: 11
+# Q3 Answer: 2012-02-06 07:25:30 UTC
 import csv
 #Open the binary input file
 input_file = open("binaryFileC_74.bin", 'rb')
@@ -8,7 +11,7 @@ frame_number = 1
 #Read the first byte and loop as long as
 #there is always another byte available
 byte = input_file.read(1)
-Framestart = False
+complete_frame_count = 0
 output_file_path = "output.csv"
 temperature_table = {
     0xA0: 30.0, 0xA1: 30.1, 0xA2: 30.2, 0xA3: 30.3, 0xA4: 30.4, 0xA5: 30.5, 0xA6: 30.6, 0xA7: 30.7,
@@ -34,13 +37,14 @@ while byte:
         # Read the next byte to check if it's also the start of a frame
         next_byte = input_file.read(1)
         if next_byte == b'~':
-            Framestart = True
+            
 
             input_file.seek(-2, 1)
             frame_bytes = input_file.read(FRAME_SIZE)
             checksum = 255 - (sum(frame_bytes[:-1]) % 256 )
 
             if checksum == frame_bytes[-1]:
+                complete_frame_count +=1
                 # Store the frame in the list along with its number
                 data_frames.append((frame_number, frame_bytes))
                 byte_str = ', '.join(str(byte) for byte in frame_bytes)
@@ -115,3 +119,4 @@ with open(output_file_path, 'w', newline='') as csvfile:
         # 将每个帧信息写入CSV文件
         csv_writer.writerow(frame_info)
     print("CSV文件写入完成:", output_file_path)
+    print("number of complete frames:", complete_frame_count)
