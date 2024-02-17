@@ -9,6 +9,23 @@ frame_number = 1
 #there is always another byte available
 byte = input_file.read(1)
 Framestart = False
+temperature_table = {
+    0xA0: 30.0, 0xA1: 30.1, 0xA2: 30.2, 0xA3: 30.3, 0xA4: 30.4, 0xA5: 30.5, 0xA6: 30.6, 0xA7: 30.7,
+    0xA8: 30.8, 0xA9: 30.9, 0xAA: 31.0, 0xAB: 31.1, 0xAC: 31.2, 0xAD: 31.3, 0xAE: 31.4, 0xAF: 31.5,
+    0xB0: 31.6, 0xB1: 31.7, 0xB2: 31.8, 0xB3: 31.9, 0xB4: 32.0, 0xB5: 32.1, 0xB6: 32.2, 0xB7: 32.3,
+    0xB8: 32.4, 0xB9: 32.5, 0xBA: 32.6, 0xBB: 32.7, 0xBC: 32.8, 0xBD: 32.9, 0xBE: 33.0, 0xBF: 33.1,
+    0xC0: 33.2, 0xC1: 33.3, 0xC2: 33.4, 0xC3: 33.5, 0xC4: 33.6, 0xC5: 33.7, 0xC6: 33.8, 0xC7: 33.9,
+    0xC8: 34.0, 0xC9: 34.1, 0xCA: 34.2, 0xCB: 34.3, 0xCC: 34.4, 0xCD: 34.5, 0xCE: 34.6, 0xCF: 34.7,
+    0xD0: 34.8, 0xD1: 34.9, 0xD2: 35.0, 0xD3: 35.1, 0xD4: 35.2, 0xD5: 35.3, 0xD6: 35.4, 0xD7: 35.5,
+    0xD8: 35.6, 0xD9: 35.7, 0xDA: 35.8, 0xDB: 35.9, 0xDC: 36.0, 0xDD: 36.1, 0xDE: 36.2, 0xDF: 36.3,
+    
+}
+def lookup_temperature(byte_value):
+    if byte_value in temperature_table:
+        return temperature_table[byte_value]
+    else:
+        return None
+    
 while byte:
     print("Byte value is (hexidecimal): " + str(byte))
     print("Byte value is (decimal): " + str(int.from_bytes(byte)))
@@ -70,8 +87,8 @@ for frame in data_frames:
     byte9_to_10_uint16 = int.from_bytes(frame_bytes[8:10], byteorder='big')  # 第9至第10个byte转换成16位无符号整数
     byte11_to_12_uint16 = int.from_bytes(frame_bytes[10:12], byteorder='big')  # 第11至第12个byte转换成16位无符号整数
     byte13_to_14_uint16 = int.from_bytes(frame_bytes[12:14], byteorder='little')  # 第13至第14个byte转换成16位无符号整数
-    byte15_hex = hex(frame_bytes[14])  # 第15个byte转换成16进制
-    byte16_hex = hex(frame_bytes[15])  # 第16个byte转换成16进制
+    byte15_hex = lookup_temperature(frame_bytes[14])  # 第15个byte查表
+    byte16_hex = lookup_temperature(frame_bytes[15])  # 第16个byte转换成16进制
     byte17_char = chr(frame_bytes[16])  # 第17个byte转换成ASCII字符
     byte18_to_25_uint64 = int.from_bytes(frame_bytes[17:25], byteorder='big')  # 第18至第25个byte转换成64位无符号整数
     byte26_decimal = frame_bytes[25]  # 第26个byte转换成10进制数
