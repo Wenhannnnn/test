@@ -56,29 +56,29 @@ while byte:
 #Must be end of the file so close the file
 print("End of file reached")
 input_file.close()
-# 解码
-# 创建一个列表，用于存储处理后的信息
+# Decoding
+# Create a list to store the processed information.
 processed_frames = []
 for frame in data_frames:
     frame_bytes = frame[1]
-    # 解析每个byte
-    byte1_char = chr(frame_bytes[0])  # 第1个byte转换成ASCII字符
-    byte2_char = chr(frame_bytes[1])  # 第2个byte转换成ASCII字符
-    byte3_decimal = frame_bytes[2]
-    byte4_decimal = frame_bytes[3]
-    byte5_decimal = frame_bytes[4]
-    byte6_decimal = frame_bytes[5]
-    byte7_decimal = frame_bytes[6]
-    byte8_char = chr(frame_bytes[7])  # 第8个byte转换成ASCII字符
-    byte9_to_10_uint16 = int.from_bytes(frame_bytes[8:10], byteorder='big')  # 第9至第10个byte转换成16位无符号整数
-    byte11_to_12_uint16 = int.from_bytes(frame_bytes[10:12], byteorder='big')  # 第11至第12个byte转换成16位无符号整数
-    byte13_to_14_uint16 = int.from_bytes(frame_bytes[12:14], byteorder='little')  # 第13至第14个byte转换成16位无符号整数
-    byte15_hex = lookup_temperature(frame_bytes[14])  # 第15个byte查表
-    byte16_hex = lookup_temperature(frame_bytes[15])  # 第16个byte转换成16进制
-    byte17_char = chr(frame_bytes[16])  # 第17个byte转换成ASCII字符
-    byte18_to_25_uint64 = int.from_bytes(frame_bytes[17:25], byteorder='big')  # 第18至第25个byte转换成64位无符号整数
-    byte26_decimal = frame_bytes[25]  # 第26个byte转换成10进制数
-   # 将处理后的信息存储到列表中
+    # decode each byte
+    byte1_char = chr(frame_bytes[0])  # Convert the first byte to ASCII character
+    byte2_char = chr(frame_bytes[1])  # Convert the second byte to ASCII character
+    byte3_decimal = frame_bytes[2] # Convert the third byte to decimal number
+    byte4_decimal = frame_bytes[3] # Convert the forth byte to decimal number
+    byte5_decimal = frame_bytes[4] # Convert the fifth byte to decimal number
+    byte6_decimal = frame_bytes[5] # Convert the sixth byte to decimal number
+    byte7_decimal = frame_bytes[6] # Convert the seventh byte to decimal number
+    byte8_char = chr(frame_bytes[7])  # Convert the eighth byte to ASCII character
+    byte9_to_10_uint16 = int.from_bytes(frame_bytes[8:10], byteorder='big')  # Convert the 9th and 10th bytes to a 16-bit unsigned integer
+    byte11_to_12_uint16 = int.from_bytes(frame_bytes[10:12], byteorder='big')  # Convert the 11th and 12th bytes to a 16-bit unsigned integer
+    byte13_to_14_uint16 = int.from_bytes(frame_bytes[12:14], byteorder='little')  # Convert the 13th and 14th bytes to a 16-bit unsigned integer
+    byte15_hex = lookup_temperature(frame_bytes[14])  # Look up the temperature corresponding to the 15th byte in the table
+    byte16_hex = lookup_temperature(frame_bytes[15])  # Look up the temperature corresponding to the 16th byte in the table
+    byte17_char = chr(frame_bytes[16])  # Convert the 17th byte to ASCII character
+    byte18_to_25_uint64 = int.from_bytes(frame_bytes[17:25], byteorder='big')  # Convert the 18th to 25th bytes to a 64-bit unsigned integer
+    byte26_decimal = frame_bytes[25]  # Convert the 26th byte to decimal number
+# Store the processed information into a list
     processed_frame_info = [
         byte1_char, byte2_char, byte3_decimal,byte4_decimal,byte5_decimal,byte6_decimal,byte7_decimal, byte8_char,
         byte9_to_10_uint16, byte11_to_12_uint16, byte13_to_14_uint16,
@@ -88,14 +88,14 @@ for frame in data_frames:
     processed_frames.append(processed_frame_info)
     for frame_info in processed_frames:
         print(", ".join(str(item) for item in frame_info))
-        print()  # 每个帧输出完成后换行
+        print()  # Add a newline after each frame output is completed
 #End of skeleton code
 with open(output_file_path, 'w', newline='') as csvfile:
-    # 创建CSV写入对象
+# Create a CSV file
     csv_writer = csv.writer(csvfile)
-    # 遍历处理后的每个帧信息
+    # Iterate through each processed frame information
     for frame_info in processed_frames:
-        # 将每个帧信息写入CSV文件
+        # Write each frame information to the CSV file
         csv_writer.writerow(frame_info)
-    print("CSV文件写入完成:", output_file_path)
+    print("CSV file writing completed:", output_file_path)
     print("number of complete frames:", complete_frame_count)
