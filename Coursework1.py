@@ -1,7 +1,7 @@
 #Start of skeleton code
-
+import csv
 #Open the binary input file
-input_file = open("binaryFileC_94.bin", 'rb')
+input_file = open("binaryFileC_74.bin", 'rb')
 FRAME_SIZE = 26
 data_frames = []
 frame_number = 1
@@ -9,6 +9,7 @@ frame_number = 1
 #there is always another byte available
 byte = input_file.read(1)
 Framestart = False
+output_file_path = "output.csv"
 temperature_table = {
     0xA0: 30.0, 0xA1: 30.1, 0xA2: 30.2, 0xA3: 30.3, 0xA4: 30.4, 0xA5: 30.5, 0xA6: 30.6, 0xA7: 30.7,
     0xA8: 30.8, 0xA9: 30.9, 0xAA: 31.0, 0xAB: 31.1, 0xAC: 31.2, 0xAD: 31.3, 0xAE: 31.4, 0xAF: 31.5,
@@ -24,7 +25,7 @@ def lookup_temperature(byte_value):
     if byte_value in temperature_table:
         return temperature_table[byte_value]
     else:
-        return 0.0
+        return None
     
 while byte:
     print("Byte value is (hexidecimal): " + str(byte))
@@ -105,3 +106,12 @@ for frame in data_frames:
         print(", ".join(str(item) for item in frame_info))
         print()  # 每个帧输出完成后换行
 #End of skeleton code
+with open(output_file_path, 'w', newline='') as csvfile:
+    # 创建CSV写入对象
+    csv_writer = csv.writer(csvfile)
+
+    # 遍历处理后的每个帧信息
+    for frame_info in processed_frames:
+        # 将每个帧信息写入CSV文件
+        csv_writer.writerow(frame_info)
+    print("CSV文件写入完成:", output_file_path)
