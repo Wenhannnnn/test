@@ -24,7 +24,7 @@ def lookup_temperature(byte_value):
     if byte_value in temperature_table:
         return temperature_table[byte_value]
     else:
-        return None
+        return 0.0
     
 while byte:
     print("Byte value is (hexidecimal): " + str(byte))
