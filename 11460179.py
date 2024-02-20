@@ -30,7 +30,7 @@ def lookup_temperature(byte_value):
         return None
 while byte:
     print("Byte value is (hexidecimal): " + str(byte))
-    print("Byte value is (decimal): " + str(int.from_bytes(byte)))
+    print("Byte value is (decimal): " + str(int.from_bytes(byte,byteorder='big')))
     if byte == b'~':
         # Read the next byte to check if it's also the start of a frame
         next_byte = input_file.read(1)
